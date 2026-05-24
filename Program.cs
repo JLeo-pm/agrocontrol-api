@@ -66,7 +66,10 @@ builder.Services.AddScoped<JwtService>();
 
 var jwtSettings = builder.Configuration.GetSection("Jwt");
 
-var keyString = jwtSettings["Key"] ?? throw new Exception("JWT Key missing");
+var keyString = builder.Configuration["Jwt:Key"];
+
+if (string.IsNullOrEmpty(keyString))
+    keyString = "dev_key";
 var issuer = jwtSettings["Issuer"] ?? "SmartRancho";
 var audience = jwtSettings["Audience"] ?? "SmartRanchoClient";
 

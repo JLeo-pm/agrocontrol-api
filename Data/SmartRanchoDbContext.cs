@@ -13,9 +13,8 @@ public class SmartRanchoDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<Rancho> Ranchos => Set<Rancho>();
     public DbSet<Potrero> Potreros => Set<Potrero>();
     public DbSet<Animal> Animales => Set<Animal>();
-    public DbSet<AnimalEstadoHistorial> EstadoAnimal => Set<AnimalEstadoHistorial>();
     public DbSet<AnimalEstadoHistorial> AnimalEstadoHistorial { get; set; }
-    public DbSet<AnimalMovimientoPotrero> AnimalMovimientoPotrero { get; set; }
+    public DbSet<AnimalMovimientoPotrero> AnimalMovimientoPotrero => Set<AnimalMovimientoPotrero>();
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);

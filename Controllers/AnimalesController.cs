@@ -162,7 +162,7 @@ public class AnimalesController : ControllerBase
             nuevoEstado
         });
     }
-    
+
     [HttpGet("{id}/historial")]
     public IActionResult GetHistorialAnimal(int id)
     {
@@ -258,7 +258,10 @@ public class AnimalesController : ControllerBase
 
         await _context.SaveChangesAsync();
 
-        return Ok("Animal movido correctamente");
+        return Ok(new
+        {
+            message = "Animal movido correctamente"
+        });
     }
 
     [HttpGet("{id}/movimientos")]
@@ -313,5 +316,38 @@ public class AnimalesController : ControllerBase
             .ToList();
 
         return Ok(historial);
+    }
+
+    [HttpGet("{id}")]
+    public IActionResult GetAnimalById(int id)
+    {
+        var ranchoId = GetRanchoId();
+
+        var animal = _context.Animales
+            .AsNoTracking()
+            .Where(a => a.AnimalId == id && a.RanchoId == ranchoId)
+            .Select(a => new
+            {
+                a.AnimalId,
+                a.NumeroArete,
+                a.Nombre,
+                a.Sexo,
+                a.Raza,
+                a.FechaNacimiento,
+                a.Color,
+                a.Observaciones,
+                a.Estado,
+                a.PotreroId,
+
+                PotreroNombre = a.Potrero != null
+                    ? a.Potrero.Nombre
+                    : null
+            })
+            .FirstOrDefault();
+
+        if (animal == null)
+            return NotFound("Animal no encontrado");
+
+        return Ok(animal);
     }
 }
